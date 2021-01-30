@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import json
-from modelLoaderSaver import modelLoaderSaver
+import joblib
 
 def trainModel():
     train = pd.read_csv('app/model/train.csv')
@@ -30,8 +30,8 @@ def trainModel():
     classifier = RandomForestClassifier()
     classifier.fit(X,y)
 
-    saver = modelLoaderSaver(classifier)
-    saver.save('app\model\model_params.txt')
+    filename = 'app\model\model_params.sav'
+    joblib.dump(classifier, open(filename, 'wb'))
 
 if __name__ == '__main__':
     trainModel()

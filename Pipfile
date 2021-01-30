@@ -12,6 +12,7 @@ scikit-learn = "*"
 jupyter = "*"
 wtforms = "*"
 flask-wtf = "*"
+joblib = "*"
 
 [requires]
 python_version = "3.8"
