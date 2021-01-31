@@ -14,4 +14,4 @@ WORKDIR ${PROJECT_DIR}/
 RUN pipenv install --system --deploy
 
 COPY app ${PROJECT_DIR}/app
-ENTRYPOINT gunicorn -w 3 run:app
+ENTRYPOINT gunicorn -w 3 run:app 
