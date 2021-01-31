@@ -1,11 +1,14 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from pathlib import Path
 import numpy as np
 import json
 import joblib
 
+model_folder = Path('app/model/')
+
 def trainModel():
-    train = pd.read_csv('app/model/train.csv')
+    train = pd.read_csv(model_folder / 'train.csv')
     train['Sex'].replace({'male': 0, 'female':1}, inplace = True)
     train = train[train['Age'].isnull() == False]
     train = train[train['Embarked'].isnull() == False]
@@ -18,7 +21,7 @@ def trainModel():
     'fare_std': train['Fare'].std(),
     'fare_mean': train['Fare'].mean()    
     }
-    with open('app\model\scaling_params.json', 'w') as result:
+    with open(model_folder / 'scaling_params.json', 'w') as result:
         json.dump(scaling_params, result)
 
     train['Age'] = (train['Age'] - scaling_params['age_std'])/scaling_params['age_mean']
@@ -30,7 +33,7 @@ def trainModel():
     classifier = RandomForestClassifier()
     classifier.fit(X,y)
 
-    filename = 'app\model\model_params.sav'
+    filename = model_folder / 'model_params.sav'
     joblib.dump(classifier, open(filename, 'wb'))
 
 if __name__ == '__main__':

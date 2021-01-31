@@ -1,6 +1,6 @@
 from flask import render_template, flash, url_for, redirect
 from flask.blueprints import Blueprint
-from sklearn.ensemble import RandomForestClassifier
+from pathlib import Path
 import numpy as np
 import json
 import joblib
@@ -9,14 +9,15 @@ from app.forms import PredictDataForm
 from app.model.train import trainModel
 
 main = Blueprint('main', __name__)
+model_folder = Path('app/model/')
 
 @main.route("/", methods=['GET', 'POST'])
 @main.route("/home", methods=['GET', 'POST'])
 def home():
-    filename = 'app\model\model_params.sav'    
+    filename = model_folder / 'model_params.sav'    
     classifier = joblib.load(filename)
 
-    with open('app\model\scaling_params.json') as file:
+    with open(model_folder / 'scaling_params.json') as file:
         scaling_params = json.load(file)
 
     embarked_q = 0

@@ -15,6 +15,7 @@ flask-wtf = "*"
 joblib = "*"
 gunicorn = "*"
 numpy = "*"
+pathlib = "*"
 
 [requires]
 python_version = "3.8"
