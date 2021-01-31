@@ -3,7 +3,7 @@ server {
         server_name 139.162.132.233;
 
         location /static {
-                alias /app/app/static;
+                alias /RealTimePrediction/app/static;
         }
 
         location / {
