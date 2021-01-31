@@ -11,24 +11,37 @@
     </head>
 <body>
     <main>
+        <h1>Titanic survivability prediction</h1>
         <div class="form-box">
+        {% with messages = get_flashed_messages(with_categories=true) %}            
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Insert passenger data</legend>
-                <div class="form-group">
-                    {{ form.passenger_class.label(class="form-control-label") }}
-                    {% if form.passenger_class.errors %}
-                        {{ form.passenger_class(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.passenger_class.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.passenger_class(class="form-control form-control-lg") }}
-                    {% endif %}                    
-                </div>
+                <div class="form-check">
+                    <p class="form-check-label">Passenger class</p>
+                    {% for field in form.passenger_class %}                                          
+                            {% if field.errors %}
+                                {{ field(class="form-check form-check-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in field.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ field(class="form-check-input") }}
+                            {% endif %}
+                            {{ field.label(class="form-check-label") }}<br>        
+                    {% endfor %}
+                </div> 
                 <div class="form-check">
                 <p class="form-check-label">Sex</p>
                 {% for field in form.sex %}                                          
@@ -119,9 +132,9 @@
             </div>
         </form>
         {% if prediction %}
-            <div class="form-control form-control-lg">Probability of survival: {{ prediction }}</div>
-            </div>
+            <div class="form-control form-control-lg">Probability of survival: {{ prediction }}</div><br>
         {% endif %}
+        <a class="btn btn-outline-info" href="{{ url_for('main.train') }}">Retrain model</button>
     </main>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

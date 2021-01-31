@@ -2,11 +2,20 @@ from flask.app import Flask
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, SubmitField
 from wtforms.fields.core import RadioField
-from wtforms.validators import AnyOf, DataRequired, InputRequired, NumberRange
+from wtforms.validators import AnyOf, InputRequired
 
+class FieldsRequiredForm(FlaskForm):
+    """Require all fields to have content. This works around the bug that WTForms radio
+    fields don't honor the `DataRequired` or `InputRequired` validators.
+    """
 
-class PredictDataForm(FlaskForm):
-    passenger_class = IntegerField('Passenger class', validators=[InputRequired(), NumberRange(min=1, max=3, message='Possible classes: 1, 2 or 3.')])
+    class Meta:
+        def render_field(self, field, render_kw):
+            render_kw.setdefault('required', True)
+            return super().render_field(field, render_kw)
+
+class PredictDataForm(FieldsRequiredForm):
+    passenger_class = RadioField('Passenger class', choices=[(1, 'First'), (2, 'Second'), (3, 'Third')], coerce=int)
     sex = RadioField('Sex', choices=[(0, 'Male'), (1, 'Female')], coerce=int)
     age = IntegerField('Age', validators=[InputRequired()])
     siblings_or_spouse = IntegerField('Number of siblings or spouses aboard', validators=[InputRequired()])
